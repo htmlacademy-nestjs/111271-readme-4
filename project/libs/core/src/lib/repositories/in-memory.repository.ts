@@ -1,12 +1,13 @@
 import { CrudRepositoryInterface } from '../types';
 
-export abstract class InMemoryRepository<Entity extends object, Id> implements CrudRepositoryInterface<Entity, Id> {
-
+export abstract class InMemoryRepository<Entity extends object, Id>
+  implements CrudRepositoryInterface<Entity, Id>
+{
   private readonly storage = new Map<Id, Entity>();
 
   public abstract create(item: Partial<Entity>): Promise<Entity>;
 
-  public abstract delete(id: Id): Promise<void>;
+  public abstract delete(id: Id): Promise<boolean>;
 
   public abstract findById(id: Id): Promise<Entity | null>;
 
@@ -27,5 +28,4 @@ export abstract class InMemoryRepository<Entity extends object, Id> implements C
   protected getStorageValues(): Array<Entity> {
     return Array.from(this.storage.values());
   }
-
 }

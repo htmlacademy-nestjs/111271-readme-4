@@ -1,4 +1,4 @@
-import { UserEntityInterface } from '@project/user';
+import { UserEntityInterface } from '@project/shared/users';
 
 export class UserEntity implements UserEntityInterface {
   id!: string;
