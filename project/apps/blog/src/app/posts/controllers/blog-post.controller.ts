@@ -14,17 +14,24 @@ import { fillPostRdo, PostRdo, PostRdoList } from '../rdo/post.rdo';
 import { SavePostDto, SavePostDtoList } from '../dto/save-post.dto';
 import {
   ApiBody,
+  ApiCreatedResponse,
   ApiExtraModels,
   ApiOkResponse,
   ApiTags,
   refs,
 } from '@nestjs/swagger';
+import { SavePostCommentDto } from '../../comments/dto/save-post-comment.dto';
+import { PostCommentRdo } from '../../comments/rdo/post-comment.rdo';
+import { PostCommentService } from '../../comments/services/post-comment.service';
 
 @ApiTags('Posts')
 @ApiExtraModels(...SavePostDtoList, ...PostRdoList)
 @Controller('posts')
 export class BlogPostController {
-  constructor(private blogPostService: BlogPostService) {}
+  constructor(
+    private blogPostService: BlogPostService,
+    private postCommentService: PostCommentService
+  ) {}
 
   @ApiOkResponse({
     schema: { oneOf: refs(...PostRdoList) },
@@ -42,7 +49,7 @@ export class BlogPostController {
   @ApiBody({
     schema: { oneOf: refs(...SavePostDtoList) },
   })
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     schema: { oneOf: refs(...PostRdoList) },
   })
   @Post()
@@ -54,7 +61,7 @@ export class BlogPostController {
   @ApiBody({
     schema: { oneOf: refs(...SavePostDtoList) },
   })
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     schema: { oneOf: refs(...PostRdoList) },
   })
   @Put(':id')
@@ -73,6 +80,33 @@ export class BlogPostController {
   @Delete(':id')
   public async delete(@Param('id') id: string): Promise<void> {
     const deleted = await this.blogPostService.delete(id);
+    if (!deleted) {
+      throw new BadRequestException();
+    }
+  }
+
+  @Post(':postId/comment')
+  public async addComment(
+    @Param('postId') postId: string,
+    @Body() dto: SavePostCommentDto
+  ): Promise<PostCommentRdo> {
+    if (!(await this.blogPostService.exists(postId))) {
+      throw new BadRequestException();
+    }
+
+    return this.postCommentService.create(postId, dto);
+  }
+
+  @Delete(':postId/comment/:commentId')
+  public async deleteComment(
+    @Param('postId') postId: string,
+    @Param('commentId') commentId: string
+  ): Promise<void> {
+    if (!(await this.blogPostService.exists(postId))) {
+      throw new BadRequestException();
+    }
+
+    const deleted = await this.postCommentService.delete(commentId);
     if (!deleted) {
       throw new BadRequestException();
     }

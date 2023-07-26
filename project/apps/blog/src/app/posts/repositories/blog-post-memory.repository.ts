@@ -38,15 +38,6 @@ export class BlogPostMemoryRepository extends InMemoryRepository<
     return updated;
   }
 
-  public async delete(id: string): Promise<boolean> {
-    if (await this.findById(id)) {
-      this.removeItem(id);
-      return true;
-    }
-
-    return false;
-  }
-
   public async repost(
     id: string,
     nextAuthorId: string

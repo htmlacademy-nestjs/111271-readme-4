@@ -12,6 +12,11 @@ export class BlogPostService {
     return post as BlogPostEntity | null;
   }
 
+  public async exists(id: string): Promise<boolean> {
+    const post = await this.get(id);
+    return Boolean(post);
+  }
+
   public async create(dto: SavePostDto): Promise<BlogPostEntity> {
     const created = await this.blogPostRepository.create(dto);
     return created;

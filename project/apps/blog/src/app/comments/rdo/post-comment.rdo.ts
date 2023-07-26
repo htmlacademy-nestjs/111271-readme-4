@@ -1,16 +1,16 @@
-import { Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
 
-export class UserInfoRdo {
+export class PostCommentRdo {
   @ApiProperty()
   @Expose()
   id!: string;
 
   @ApiProperty()
   @Expose()
-  firstname!: string;
+  body!: string;
 
   @ApiProperty()
   @Expose()
-  lastname!: string;
+  createdAt!: Date;
 }

@@ -32,15 +32,6 @@ export class UserMemoryRepository extends InMemoryRepository<
     return updated;
   }
 
-  public async delete(id: string): Promise<boolean> {
-    if (await this.findById(id)) {
-      this.removeItem(id);
-      return true;
-    }
-
-    return false;
-  }
-
   public async findById(id: string): Promise<UserEntity | null> {
     return this.getItem(id);
   }

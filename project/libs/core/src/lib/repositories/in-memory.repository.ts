@@ -7,11 +7,18 @@ export abstract class InMemoryRepository<Entity extends object, Id>
 
   public abstract create(item: Partial<Entity>): Promise<Entity>;
 
-  public abstract delete(id: Id): Promise<boolean>;
-
   public abstract findById(id: Id): Promise<Entity | null>;
 
   public abstract update(id: Id, item: Partial<Entity>): Promise<Entity | null>;
+
+  public async delete(id: Id): Promise<boolean> {
+    if (await this.findById(id)) {
+      this.removeItem(id);
+      return true;
+    }
+
+    return false;
+  }
 
   protected getItem(key: Id): Entity | null {
     return this.storage.get(key) || null;

@@ -12,11 +12,16 @@ import { LoggedUserRdo } from '../rdo/logged-user.rdo';
 import { fillObject } from '@project/core';
 import { VerifyUserDto } from '../dto/verify-user.dto';
 import { AUTH_MESSAGES } from '../constants/auth-messages.constant';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthenticationController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiCreatedResponse({
+    type: LoggedUserRdo,
+  })
   @Post('register')
   public async register(@Body() dto: CreateUserDto): Promise<LoggedUserRdo> {
     const created = await this.authService.createUser(dto);
@@ -27,8 +32,11 @@ export class AuthenticationController {
     return fillObject(LoggedUserRdo, created);
   }
 
-  @Post('login')
+  @ApiOkResponse({
+    type: LoggedUserRdo,
+  })
   @HttpCode(HttpStatus.OK)
+  @Post('login')
   public async login(@Body() dto: VerifyUserDto): Promise<LoggedUserRdo> {
     const user = await this.authService.verifyUser(dto);
     if (!user) {
