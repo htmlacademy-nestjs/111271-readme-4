@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
-import { UserMemoryRepository } from './repositories/user-memory.repository';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UserDefinition } from './entities/user.model';
+import { FollowerDefinition } from './entities/followers.model';
+import { UserRepository } from './repositories/user.repository';
 
 @Module({
-  imports: [],
+  imports: [MongooseModule.forFeature([UserDefinition, FollowerDefinition])],
   controllers: [UserController],
-  providers: [UserService, UserMemoryRepository],
-  exports: [UserMemoryRepository],
+  providers: [UserService, UserRepository],
+  exports: [UserRepository],
 })
 export class UserModule {}
