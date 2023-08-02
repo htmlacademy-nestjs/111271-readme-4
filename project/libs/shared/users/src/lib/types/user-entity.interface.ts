@@ -1,5 +1,5 @@
 export interface UserEntityInterface<Id = string> {
-  id: Id;
+  id?: Id;
   firstname: string;
   lastname: string;
   email: string;

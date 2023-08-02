@@ -1,14 +1,14 @@
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UserEntity } from '../../user/entities/user.entity';
-import { UserMemoryRepository } from '../../user/repositories/user-memory.repository';
 import { Injectable } from '@nestjs/common';
 import { AuthPasswordService } from './auth-password.service';
 import { VerifyUserDto } from '../dto/verify-user.dto';
+import { UserRepository } from '../../user/repositories/user.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserMemoryRepository,
+    private userRepository: UserRepository,
     private passwordService: AuthPasswordService
   ) {}
 
