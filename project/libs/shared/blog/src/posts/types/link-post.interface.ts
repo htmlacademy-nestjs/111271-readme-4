@@ -1,10 +1,15 @@
 import { PostInterface } from './post.interface';
 import { PostTypeEnum } from './post-type.enum';
+import { Expose } from 'class-transformer';
 
-export interface LinkPostInterface extends PostInterface {
-  type: PostTypeEnum.link;
+export class LinkPost {
+  @Expose()
+  link!: string;
 
-  link: string;
-
+  @Expose()
   description?: string;
+}
+
+export interface LinkPostInterface extends PostInterface, LinkPost {
+  type: PostTypeEnum.link;
 }

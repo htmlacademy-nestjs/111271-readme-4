@@ -1,7 +1,9 @@
 import { PostTypeEnum } from '@project/shared/blog';
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseSavePostDto } from './base-save-post.dto';
+import { IsString } from 'class-validator';
 
-export class SaveImagePostDto {
+export class SaveImagePostDto extends BaseSavePostDto {
   @ApiProperty({
     type: String,
     enum: [PostTypeEnum.image],
@@ -9,5 +11,6 @@ export class SaveImagePostDto {
   type!: PostTypeEnum.image;
 
   @ApiProperty()
-  imgPath!: string;
+  @IsString()
+  url!: string;
 }

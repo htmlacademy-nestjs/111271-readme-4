@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostType {
+  Text
+  Image
+  Video
+  Link
+  Quotation
+}
+
+enum PostState {
+  Draft
+  Published
+}
+
+model Post {
+  id Int @id @default(autoincrement())
+
+  type PostType
+
+  authorId String @map("author_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  state PostState @default(Published)
+
+  comments PostComment[]
+
+  likes PostLike[]
+
+  tags PostTag[]
+
+  originalPostId Int?
+  originalPost Post? @relation("repost", fields: [originalPostId], references: [id])
+  reposts Post[] @relation("repost")
+
+  textPost TextPost?
+  imagePost ImagePost?
+  videoPost VideoPost?
+  linkPost LinkPost?
+  quotationPost QuotationPost?
+
+  @@map("posts")
+}
+
+model TextPost {
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @id
+
+  title String
+
+  preview String
+
+  body String
+
+  @@map("text_posts")
+}
+
+model ImagePost {
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @id
+
+  url String
+
+  @@map("image_posts")
+}
+
+model VideoPost {
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @id
+
+  title String
+
+  url String
+
+  @@map("video_posts")
+}
+
+model LinkPost {
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @id
+
+  link String
+
+  description String
+
+  @@map("link_posts")
+}
+
+model QuotationPost {
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int  @id
+
+  quote String
+
+  quoteAuthor String
+
+  @@map("quotation_posts")
+}
+
+model PostComment {
+  id Int @id @default(autoincrement())
+
+  post Post? @relation(fields: [postId], references: [id], onDelete: SetNull)
+  postId Int?
+
+  body String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("post_comments")
+}
+
+model PostLike {
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+
+  userId String
+
+  @@unique([postId, userId])
+
+  @@map("post_likes")
+}
+
+model PostTag {
+  posts Post[]
+
+  tag String @db.VarChar(10) @id
+
+  @@map("post_tags")
+}

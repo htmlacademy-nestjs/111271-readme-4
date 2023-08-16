@@ -1,10 +1,15 @@
 import { PostInterface } from './post.interface';
 import { PostTypeEnum } from './post-type.enum';
+import { Expose } from 'class-transformer';
 
-export interface VideoPostInterface extends PostInterface {
+export class VideoPost {
+  @Expose()
+  title!: string;
+
+  @Expose()
+  url!: string;
+}
+
+export interface VideoPostInterface extends PostInterface, VideoPost {
   type: PostTypeEnum.video;
-
-  title: string;
-
-  videoUrl: string;
 }

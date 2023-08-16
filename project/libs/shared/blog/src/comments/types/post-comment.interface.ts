@@ -1,7 +1,7 @@
 export interface PostCommentInterface {
-  id: string;
+  id: number;
 
-  postId: string;
+  postId: number | null;
 
   body: string;
 

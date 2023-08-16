@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PostStateEnum } from '@project/shared/blog';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 export class BasePostRdo {
   @ApiProperty()
@@ -17,7 +17,7 @@ export class BasePostRdo {
 
   @ApiProperty()
   @Expose()
-  publishedAt!: Date;
+  updatedAt!: Date;
 
   @ApiProperty({
     enum: PostStateEnum,
@@ -26,11 +26,15 @@ export class BasePostRdo {
   @Expose()
   state!: PostStateEnum;
 
-  @ApiProperty()
-  @Expose()
-  isRepost!: boolean;
-
   @ApiPropertyOptional()
   @Expose()
   originalPostId?: string;
+
+  @Expose()
+  @Type(() => String)
+  tags?: Array<string>;
+
+  @ApiProperty()
+  @Expose()
+  isRepost!: boolean;
 }
