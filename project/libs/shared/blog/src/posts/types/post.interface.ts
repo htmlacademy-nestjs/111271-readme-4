@@ -1,20 +1,32 @@
 import { PostStateEnum } from './post-state.enum';
 import { PostTypeEnum } from './post-type.enum';
+import { Expose } from 'class-transformer';
 
-export interface PostInterface {
-  id: string;
+export class PostInterface {
+  @Expose()
+  id?: number;
 
-  type: PostTypeEnum;
+  @Expose()
+  type!: PostTypeEnum;
 
-  authorId: string;
+  @Expose()
+  authorId!: string;
 
-  created: Date;
+  @Expose()
+  createdAt!: Date;
 
-  published: Date;
+  @Expose()
+  updatedAt!: Date;
 
-  state: PostStateEnum;
+  @Expose()
+  state!: PostStateEnum;
 
-  isRepost: boolean;
+  @Expose()
+  isRepost!: boolean;
 
-  originalPostId?: string;
+  @Expose()
+  originalPostId?: number;
+
+  @Expose()
+  tags?: Array<string>;
 }

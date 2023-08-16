@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { PostCommentMemoryRepository } from '../repositories/post-comment-memory.repository';
+import { PostCommentRepository } from '../repositories/post-comment.repository';
 import { SavePostCommentDto } from '../dto/save-post-comment.dto';
 import { PostCommentInterface } from '@project/shared/blog';
 
 @Injectable()
 export class PostCommentService {
-  constructor(private postCommentRepository: PostCommentMemoryRepository) {}
+  constructor(private postCommentRepository: PostCommentRepository) {}
 
   public create(
-    postId: string,
+    postId: number,
     comment: SavePostCommentDto
   ): Promise<PostCommentInterface> {
     return this.postCommentRepository.create({
@@ -17,7 +17,11 @@ export class PostCommentService {
     });
   }
 
-  public delete(id: string): Promise<boolean> {
+  public getPostComments(postId: number): Promise<Array<PostCommentInterface>> {
+    return this.postCommentRepository.findCommentsByPostId(postId);
+  }
+
+  public delete(id: number): Promise<boolean> {
     return this.postCommentRepository.delete(id);
   }
 }

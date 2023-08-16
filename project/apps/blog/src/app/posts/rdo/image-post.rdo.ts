@@ -13,5 +13,5 @@ export class ImagePostRdo extends BasePostRdo {
 
   @ApiProperty()
   @Expose()
-  imgUrl!: string;
+  url!: string;
 }

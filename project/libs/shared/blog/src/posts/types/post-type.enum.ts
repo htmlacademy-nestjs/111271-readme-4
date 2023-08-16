@@ -1,7 +1,15 @@
 export enum PostTypeEnum {
-  video = 'video',
-  image = 'image',
-  link = 'link',
-  quotation = 'quotation',
-  text = 'text',
+  text = 'Text',
+  image = 'Image',
+  video = 'Video',
+  link = 'Link',
+  quotation = 'Quotation',
 }
+
+export const PostTypeList = [
+  PostTypeEnum.text,
+  PostTypeEnum.image,
+  PostTypeEnum.video,
+  PostTypeEnum.link,
+  PostTypeEnum.quotation,
+];

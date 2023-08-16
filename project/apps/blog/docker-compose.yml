@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  blog.postgres:
+    image: postgres:14-alpine
+    container_name: blog.postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: blog
+    ports:
+      - 5432:5432
+    volumes:
+      - blog.postgres:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d test" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - blog.postgres
+
+  blog.pgadmin:
+    image: dpage/pgadmin4
+    container_name: blog.pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "test@test.local"
+      PGADMIN_DEFAULT_PASSWORD: "test"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - 8082:80
+    networks:
+      - blog.postgres
+
+volumes:
+  blog.postgres:
+
+networks:
+  blog.postgres:
+    driver: bridge
